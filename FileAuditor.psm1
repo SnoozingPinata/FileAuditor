@@ -44,3 +44,28 @@ function Start-FolderCleanup {
         }
     }
 }
+
+# this does not work yet. Just added here from another scratch pad. 
+function Compress-OldHomeFolders {
+    # This creates the list of enabled users in AD. 
+
+    # Definitely not working right yet. Looks like the compare object statement has a bug. Need to make sure that I'm sorting everything and generating the lists to compare properly. 
+    $enabledUserList = @()
+    Get-ADUser -Filter 'Enabled -eq $true' | Sort-Object -Property SamAccountName | ForEach-Object -Process {
+        $enabledUserList += $_.SamAccountName
+    }
+
+    $directoryList = @()
+    Get-ChildItem -Path $REMOVEDADDAPATHHERE | Sort-Object -Property Name | ForEach-Object -Process {
+        $directoryList += $_.Name
+    }
+
+
+    Get-ChildItem -Path $REMOVEDADDAPATHHERE | Sort-Object -Property Name | ForEach-Object -Process {
+        $directoryList += $_.Name
+    }
+
+    $sortedDirectoryList = $directoryList | Sort-Object -Property Name
+
+    Compare-Object -ReferenceObject $enabledUserList -DifferenceObject $sortedDirectoryList
+}
