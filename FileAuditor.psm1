@@ -12,18 +12,31 @@ function Start-FolderCleanup {
     )
 
     Process {
-        # See if the parameter was defined, if not create a variable with a new path.
-        if (-not ($ArchivePath)) {
-            $ArchivePath = Join-Path -Path $Path -ChildPath "AutomatedCleanup"
+        # Checks if parameter was defined. 
+            # If it was not defined, it creates the ArchivePath with a default name in the parent path. 
+            # If it was defined, checks to see if the path is valid.
+                # If path is valid, writes a verbose message and exits this bit of code.
+                # If path is not valid, writes a verbose message and sets the archive path to the same default name in the parent path.
+        if ($ArchivePath) {
+            if (Test-Path -Path $ArchivePath) {
+                Write-Verbose -Message "ArchivePath parameter has been validate."
+            } else {
+                Write-Verbose -Message "ArchivePath parameeter was not valid."
+                $ArchivePath = Join-Path -Path $Path -ChildPath "zAutomatedCleanup"
+            } 
+        } else {
+            $ArchivePath = Join-Path -Path $Path -ChildPath "zAutomatedCleanup"
         }
 
-        # Test to see if path exists, if not then create a directory with the $ArchivePath variable. 
-        # Need to add some more validation here to make sure the ArchivePath that was entered is a valid path, if it's not fail or use default parameters. 
+        # Test to see if the ArchivePath directory exists.
+            # If not then it create a directory with the $ArchivePath variable. 
         if (-not (Test-Path -Path $ArchivePath)) {
             New-Item -Path $ArchivePath -ItemType "directory"
         }
 
-        # Check to see if the child items in the designated $Path are folders, if not move them to the designated $ArchivePath
+        # Gets all of the items in the mandatory Path directory.
+        # Checks each one to see if it is a directory.
+            # If it's not a directory, moves the item to the $ArchivePath directory.
         Get-ChildItem -Path $Path | ForEach-Object -Process {
             if (-not ($_ -is [System.IO.DirectoryInfo])) {
                 Move-Item -Path $_.FullName -Destination (Join-Path -Path $ArchivePath -ChildPath $_.Name)
