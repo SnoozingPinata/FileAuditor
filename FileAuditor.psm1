@@ -1,4 +1,36 @@
 function Start-FolderCleanup {
+     <#
+        .SYNOPSIS
+        Moves any files in a directory to another directory. Useful for keeping public folders clean of files where users should not be placing them. 
+
+        .DESCRIPTION
+        Moves any files in a directory to another directory. Useful for keeping public folders clean of files where users should not be placing them. 
+
+        .PARAMETER Path
+        Mandatory: This is the path you wish to automatically cleanup.
+
+        .PARAMETER ArchivePath
+        This is the path to the directory you want to move the files to.
+
+        .INPUTS
+        
+
+        .OUTPUTS
+
+
+        .EXAMPLE
+        Start-FolderCleanup -Path P:\Public
+
+        .EXAMPLE
+        Start-FolderCleanup -Path P:\Public -ArchivePath "P:\Cleaned Files"
+
+        .LINK
+        Github source: https://github.com/SnoozingPinata/FileAuditor
+
+        .LINK
+        Author's website: www.samuelmelton.com
+    #>
+
     [CmdletBinding()]
     Param (
         [Parameter(
@@ -10,6 +42,9 @@ function Start-FolderCleanup {
             Mandatory=$false)]
         [string] $ArchivePath
     )
+
+    Begin {
+    }
 
     Process {
         # Checks if parameter was defined. 
@@ -42,6 +77,9 @@ function Start-FolderCleanup {
                 Move-Item -Path $_.FullName -Destination (Join-Path -Path $ArchivePath -ChildPath $_.Name)
             }
         }
+    }
+
+    End {
     }
 }
 
