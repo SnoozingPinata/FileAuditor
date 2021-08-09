@@ -1,4 +1,5 @@
 function Start-FolderCleanup {
+<<<<<<< HEAD
     <#
         .SYNOPSIS
         Moves all non-directory files from the given directory into a target ArchivePath directory.
@@ -21,6 +22,32 @@ function Start-FolderCleanup {
 
         .EXAMPLE
         Start-FolderCleanup -Path '\\contoso.com\PublicSharedFolder' -ArchivePath '\\contoso.com\PublicSharedFolder\ToBeDeleted'
+=======
+     <#
+        .SYNOPSIS
+        Moves any files in a directory to another directory. Useful for keeping public folders clean of files where users should not be placing them. 
+
+        .DESCRIPTION
+        Moves any files in a directory to another directory. Useful for keeping public folders clean of files where users should not be placing them. 
+
+        .PARAMETER Path
+        Mandatory: This is the path you wish to automatically cleanup.
+
+        .PARAMETER ArchivePath
+        This is the path to the directory you want to move the files to.
+
+        .INPUTS
+        
+
+        .OUTPUTS
+
+
+        .EXAMPLE
+        Start-FolderCleanup -Path P:\Public
+
+        .EXAMPLE
+        Start-FolderCleanup -Path P:\Public -ArchivePath "P:\Cleaned Files"
+>>>>>>> 6d521fb98a3bdf38c957021fbb4222b75bd2d9cf
 
         .LINK
         Github source: https://github.com/SnoozingPinata/FileAuditor
@@ -28,6 +55,10 @@ function Start-FolderCleanup {
         .LINK
         Author's website: www.samuelmelton.com
     #>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d521fb98a3bdf38c957021fbb4222b75bd2d9cf
     [CmdletBinding()]
     Param (
         [Parameter(
@@ -39,6 +70,9 @@ function Start-FolderCleanup {
             Mandatory=$false)]
         [string] $ArchivePath
     )
+
+    Begin {
+    }
 
     Process {
 
@@ -63,4 +97,36 @@ function Start-FolderCleanup {
             }
         }
     }
+<<<<<<< HEAD
 }
+=======
+
+    End {
+    }
+}
+
+# this does not work yet. Just added here from another scratch pad. 
+function Compress-OldHomeFolders {
+    # This creates the list of enabled users in AD. 
+
+    # Definitely not working right yet. Looks like the compare object statement has a bug. Need to make sure that I'm sorting everything and generating the lists to compare properly. 
+    $enabledUserList = @()
+    Get-ADUser -Filter 'Enabled -eq $true' | Sort-Object -Property SamAccountName | ForEach-Object -Process {
+        $enabledUserList += $_.SamAccountName
+    }
+
+    $directoryList = @()
+    Get-ChildItem -Path $REMOVEDADDAPATHHERE | Sort-Object -Property Name | ForEach-Object -Process {
+        $directoryList += $_.Name
+    }
+
+
+    Get-ChildItem -Path $REMOVEDADDAPATHHERE | Sort-Object -Property Name | ForEach-Object -Process {
+        $directoryList += $_.Name
+    }
+
+    $sortedDirectoryList = $directoryList | Sort-Object -Property Name
+
+    Compare-Object -ReferenceObject $enabledUserList -DifferenceObject $sortedDirectoryList
+}
+>>>>>>> 6d521fb98a3bdf38c957021fbb4222b75bd2d9cf
